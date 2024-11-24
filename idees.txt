@@ -1,0 +1,345 @@
+<div class="container">
+
+    <!-- #HEADER -->
+    <header>
+      <nav class="navbar">
+        <div class="navbar-wrapper">
+          <a href="#">
+            <img src="./assets/images/logo.png" alt="logo" width="130">
+          </a>
+          <b>
+          <ul class="navbar-nav">
+
+            <li class="nav-item">
+              <a href="?page=home" class="nav-link">Accueil</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="?page=apropos" class="nav-link">A propos</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="services.php" class="nav-link">Services</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="menu.php" class="nav-link">Menu</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="menu.php" class="nav-link">Commander</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="menu.php" class="nav-link">Reserver</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="?page=contact" class="nav-link">Contact</a>
+            </li>
+
+            <li class="nav-item">
+              <a href="dashboard.php" class="nav-link">Tableau de bord</a>
+            </li>
+
+            <li class="nav-item">
+              <?php
+              if(isset($_SESSION['logged_in']) && $_SESSION['logged_in']==true)
+              {
+                echo'<a href="logout.php" class="nav-link">Se deconnecter</a>';
+              }
+              else{
+                echo'<a href="?page=login" class="nav-link">Se connecter</a>';
+                echo'<a href="?page=register" class="nav-link">Creer compte</a>';
+              }
+            ?>             
+            </li>
+
+          </ul>
+
+        </b>
+
+        <!--Cart count badge checker -->
+        <?php
+          if(isset($_SESSION['cart']))
+          {
+            $count=count($_SESSION['cart']);
+          }
+          else
+          {
+            $count=0;
+          }
+        ?>
+
+          <div class="navbar-btn-group">
+            <button class="shopping-cart-btn">
+              <span class="big"><i class="bi bi-cart4"></i></span>
+              <!-- <img src="./assets/images/cart.svg" alt="shopping cart icon" width="18"> -->
+              <span class="count"><?php echo $count ?></span>
+            </button>
+
+            <button class="menu-toggle-btn">
+              <span class="line one"></span>
+              <span class="line two"></span>
+              <span class="line three"></span>
+            </button>
+          </div>
+
+        </div>
+      </nav>
+      
+      <div class="cart-box">
+    <ul class="cart-box-ul">
+        <h4 class="cart-h4">Your order.</h4>
+        <?php
+        if (isset($_SESSION['cart'])) {
+            foreach ($_SESSION['cart'] as $key => $value) {
+                $sr = $key + 1; // Fixing the $sr value
+                echo "
+                <li class='cart-item'>
+                    <div class='img-box'>
+                        <img src='./assets/images/menu1.jpg' alt='product image' class='product-img' width='50' height='50' loading='lazy'>
+                    </div>
+                    $value[Item_name]<br>
+                    $value[price]₹<input type='hidden' class='iprice' value='$value[price]' id='iprice_$sr'>
+                    <form action='manage_cart.php' method='POST'>
+                        <input class='iquantity' name='Mod_Quantity' onchange='this.form.submit();' type='number' value='$value[Quantity]' min='1' max='10' placeholder='Quantity'>
+                        <input type='hidden' name='Item_name' value='$value[Item_name]'>
+                    </form>
+                    <span class='itotal'></span>
+                    <form action='manage_cart.php' method='POST'>
+                        <button name='remove_item' class='remove-button remove-button1'>Remove</button>
+                        <input type='hidden' name='Item_name' value='$value[Item_name]'>
+                    </form>
+                </li>";
+            }
+        }
+        ?>
+        <p class="product-price">
+            <span class="small" id='gtotal'></span>
+        </p>
+    </ul>
+
+    <?php
+    if(isset($_SESSION['cart']) && count($_SESSION['cart']) > 0)
+    {
+    ?>
+    <form action="checkout.php" method="POST">
+        <?php
+        // Add hidden input fields for Item_name, price, Quantity
+        foreach ($_SESSION['cart'] as $key => $value) {
+            
+            echo "
+            <input type='hidden' name='Item_name[]' value='$value[Item_name]'>
+            <input type='hidden' name='price[]' value='$value[price]'>
+            <input type='hidden' name='Quantity[]' value='$value[Quantity]'>";
+        }
+        ?>
+        <div class="cart-btn-group">
+            <button name='checkout' class="btn btn-primary">Checkout</button>
+        </div>
+    </form>
+    <?php
+    }
+    ?>
+</div>
+
+          
+  
+    </header>
+    <main>
+
+
+// register
+<div class="container">
+          
+              <div class="form-container">
+                <div class="form-title"><b>Register</b></div>
+                <form action="#" method="POST">
+                  <!-- Login Information -->
+                  <div class="form-section">
+
+                    <div class="form-field">
+                      <label for="full-name">FULL NAME</label>
+                      <input type="text" id="full-name" name="full-name" required>
+                    </div>
+
+                    <div class="form-field">
+                      <label for="email">EMAIL</label>
+                      <input type="email" id="email" name="email" required>
+                    </div>
+                                       
+                    <div class="form-field">
+                      <label for="password">PASSWORD</label>
+                      <input type="password" id="password" name="password" required>
+                    </div>
+
+                    <div class="form-field">
+                      <label for="gender">Gender</label>
+                      <select id="gender" name="gender" required>
+                        <option value="" disabled selected>Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="prefer-not-to-say">Prefer not to say</option>
+                      </select>
+                    </div>
+
+                  </div>
+
+                  <div class="form-section">                                       
+                  </div>
+
+                  <div class="form-section">
+
+                    <div class="form-field">
+                      <label for="state">STATE</label>
+                      <input type="text" id="state" name="state" required>
+                    </div>
+
+                    <div class="form-field">
+                      <label for="district">DISTRICT</label>
+                      <input type="text" id="district" name="district" required>
+                    </div>
+                                       
+                  </div>
+                  <div class="form-field">
+                      <label for="confirm-password">CONFIRM YOUR PASSWORD</label>
+                      <input type="password" id="confirm-password" name="confirm-password" required>
+                    </div>
+
+                  <button type="submit" name="register" class="login-btn">Register</button>
+                </form>
+                
+                <div class="form-question center"><h3>Already Registered? <u><a href="new-login.php" style="display: inline; color: #216aca;" onmouseover="this.style.color='#03d9ff'" onmouseout="this.style.color='#216aca'">Login Here</h3></a></u></div>
+              
+              </div>
+            </div>
+
+
+old menu 
+
+  <section class="container-fluid" id="home">
+    <!-- <section class="py-5 text-center container"> -->
+    <div class="row py-lg-5 text-center ">
+
+      <div class="col-md-12 mx-auto">
+        <h1 class="fw-light">Menu</h1>
+        <a href="?page=menu" class="btn btn-warning my-2">Tout</a>
+        <?php foreach ($toutesLesCategories as $categorie) : ?>
+          <a href="?page=menu&idCategorie=<?= $categorie->idCategorie ?>" class="btn btn-outline-secondary my-2"><?= $categorie->nom ?></a>
+        <?php endforeach ?>
+
+
+      </div>
+    </div>
+    <!--  </section> -->
+
+
+    <div class="album bg-body-tertiary">
+
+      <div class="container">
+
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+          <?php foreach ($tousLesPlats as $plat) : ?>
+
+            <div class="col">
+
+              <div class="card shadow-sm">
+                <h3 class="card-title text-center"><strong><?= $plat->nom ?></strong></h3>
+                <?php $image = $initImagePlat->afficherPremiereImagePlatParPlat($plat->idPlat) ?>
+                <img src="./assets/images/upload/plats/<?= $image->photo ?>" class="bd-placeholder-img card-img border" width="100%" height="200" alt="une image">
+
+                <div class="card-body">
+                  <p class="card-text"><?= $plat->description ?></p>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <!-- <div class="btn-group">
+                    <a href="?page=menu&qte=<?= $_GET['qte'] ?>" class="btn btn-sm btn-warning">Ajouter au panier</a>
+                  </div> -->
+
+                    <form action="" method="post">
+
+                      <div class="btn-group">
+                        <button class="btn btn-sm btn-warning" name="ajouterPanier">Ajouter au panier</button>
+                      </div>
+                      <input type="hidden" name="action" value="ajouterPanier">
+                      <input type="hidden" name="prix" value="<?= $plat->prix ?>">
+                      <input type="hidden" name="nom" value="<?= $plat->nom ?>">
+                      <input type="hidden" name="idPlat" value="<?= $plat->idPlat ?>">
+                      <input type="number" name="qte" id="qte" min="1" value="1" max="<?= $plat->qte ?>" class="col-2 mx-2">
+                    </form>
+
+                    <small class="text-body-secondary"><strong><?= $plat->prix . ' ' ?>CDF</strong></small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <?php endforeach ?>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  //option de Commande
+  <section id="menu" class="menu m-0 p-0">
+                    <div class="container" data-aos="fade-up">
+                      <ul class="nav nav-tabs justify-content-center" data-aos="fade-up" data-aos-delay="200">
+                        <li class="nav-item">
+                          <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#emporter">
+                            <h4>A emporter</h4>
+                          </a>
+                        </li><!-- End tab nav item -->
+                        <li class="nav-item">
+                          <a class="nav-link" data-bs-toggle="tab" data-bs-target="#livraison">
+                            <h4>Livraison</h4>
+                          </a>
+                        </li><!-- End tab nav item -->
+                      </ul>
+
+                      <div class="tab-content" data-aos="fade-up" data-aos-delay="300">
+
+                        <div class="tab-pane fade active show" id="emporter">
+                          <form action="" method="post">
+                            <input type="hidden" name="action" value="donneesUtilisateur">
+                            <input type="hidden" name="idUtilisateur" value="<?php if (isset($_SESSION['id']))  echo $_SESSION['id'] ?>">
+                            <div class="row">
+                              <div class="col-12">
+                                <label for="nom" class="form-label">Nom</label>
+                                <input type="text" name="nom" class="form-control" id="nom" value="<?php if (!empty($utilisateurActuel)) echo $utilisateurActuel->nom ?>" required>
+                                <div class="invalid-feedback">veuillez saisir un nom</div>
+                              </div>
+                              <div class="col-12">
+                                <label for="email" class="form-label">E-mail</label>
+                                <div class="input-group has-validation">
+                                  <span class="input-group-text" id="inputGroupPrepend">@</span>
+                                  <input type="text" name="email" class="form-control" id="email" value="<?php if (!empty($utilisateurActuel)) echo $utilisateurActuel->email ?>" required>
+                                  <div class="invalid-feedback">Entrer votre email Svp</div>
+                                </div>
+                              </div>
+
+                              <div class="col-12">
+                                <label for="telephone" class="form-label">Telephone</label>
+                                <input type="tel" name="telephone" class="form-control" id="telephone" minlength="10" value="0<?php if (!empty($utilisateurActuel)) echo (int)$utilisateurActuel->telephone ?> " required>
+                                <div class="invalid-feedback">entrer votre numero de telephone!</div>
+                              </div>
+
+
+
+
+                              <div class="row mt-3">
+                                <button class="w-25 btn btn-warning" type="submit">Valider</button>
+                              </div>
+                            </div>
+                          </form>
+
+                        </div><!-- End Starter Menu Content -->
+                        <div class="tab-pane fade active show" id="livraison">
+
+
+
+                        </div><!-- End Starter Menu Content -->
+
+                      </div>
+                    </div>
+                  </section>
